@@ -25,16 +25,16 @@ function App() {
 	this.reset = reset;
 
 	this.UI = new UI();
-	this.GOL = new GOL();
+	this.Solver = new Solver();
 	
 	this.mouseDown = false;
 }
 
 App.prototype.init = function() {
 	this.UI.init();
-	this.GOL.init();
+	this.Solver.init();
 	
-	this.UI.drawFrame(this.GOL);
+	this.UI.drawFrame(this.Solver);
 	
 	setGUI();
 	
@@ -45,13 +45,7 @@ App.prototype.init = function() {
 }
 
 function run() {
-	Life.GOL.getNextGeneration();
-	Life.UI.drawFrame(Life.GOL);
-
-	Life.GOL.getPopulation();
-	if (Life.GOL.population == 0) {
-		Life.paused = true;
-	}
+	Life.UI.drawFrame(Life.Solver);
 	
 	if (!Life.paused) {
 		console.log('tick');
@@ -70,9 +64,9 @@ function stop() {
 
 function reset() {
 	this.paused = true;
-	this.GOL.init();
-	this.GOL.population = 0;
-	this.UI.drawFrame(Life.GOL);
+	this.Solver.init();
+	this.Solver.population = 0;
+	this.UI.drawFrame(Life.Solver);
 }
 
 function mouseDownHandler(e) {
@@ -85,7 +79,7 @@ function mouseDownHandler(e) {
 		};
 	})();
 	
-	Life.UI.cellState = !Life.GOL.currentGeneration[position.row][position.col];
+	Life.UI.cellState = !Life.UI.cells[position.row][position.col];
 }
 
 function mouseUpHandler(e) {
@@ -94,21 +88,18 @@ function mouseUpHandler(e) {
 
 function mouseMoveHandler(e) {
 	if (Life.mouseDown) {
-		var position = Life.UI.fillCell(e.clientX, e.clientY, Life.GOL);
-		Life.GOL.currentGeneration[position.row][position.col] = Life.UI.cellState;
-		Life.GOL.getPopulation()
+		var position = Life.UI.fillCell(e.clientX, e.clientY);
+		Life.UI.cells[position.row][position.col] = Life.UI.cellState;
 	}
 }
 
 function clickHandler(e) {
-	var position = Life.UI.fillCell(e.clientX, e.clientY, Life.GOL);
-	Life.GOL.currentGeneration[position.row][position.col] = Life.UI.cellState;
-	Life.GOL.getPopulation()
+	var position = Life.UI.fillCell(e.clientX, e.clientY);
 }
 
 function setGUI() {
 	var gui = new dat.GUI();
-	gui.add(Life.GOL, 'population').listen();
+	gui.add(Life.Solver, 'population').listen();
 	gui.add(Life, 'start');
 	gui.add(Life, 'stop');
 	gui.add(Life, 'reset');
