@@ -22,6 +22,7 @@ function UI() {
 	this.emptyCell = '#2a2a2a';
 	this.cellColor = '#ee0000'; //00eeee
 	this.cellState = false;
+	this.cells = [];
 }
 
 UI.prototype.init = function() {
@@ -32,9 +33,18 @@ UI.prototype.init = function() {
 	if (canvas.getContext) {
 		ctx = canvas.getContext('2d');
 	}
+	
+	this.numRows = Math.floor((canvas.height - 1) / Life.UI.cellSize);
+	this.numCols = Math.floor((canvas.width - 1) / Life.UI.cellSize);
+	
+	for (var i = 0; i < this.numRows; ++i) {
+	    for (var j = 0; j < this.numCols; ++j) {
+	        this.cells[i][j] = false;
+	    }
+	} 
 }
 
-UI.prototype.fillCell = function (mouseX, mouseY, golObject) {
+UI.prototype.fillCell = function (mouseX, mouseY) {
 	var cellX = Math.floor(mouseX / this.cellSize); 
 	var cellY = Math.floor(mouseY / this.cellSize);
 	
@@ -47,13 +57,13 @@ UI.prototype.fillCell = function (mouseX, mouseY, golObject) {
 	};
 }
 
-UI.prototype.drawFrame = function (golObject) {
+UI.prototype.drawFrame = function () {
 	ctx.fillStyle = this.background;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
-	for (var i = 0; i < golObject.currentGeneration.length; ++i) {
-		for (var j = 0; j < golObject.currentGeneration[i].length; ++j) {
-			if (golObject.currentGeneration[i][j]) {
+	for (var i = 0; i < this.cells.length; ++i) {
+		for (var j = 0; j < this.cells[i].length; ++j) {
+			if (this.cells[i][j]) {
 				ctx.fillStyle = this.cellColor;
 			} else {
 				ctx.fillStyle = this.emptyCell;
