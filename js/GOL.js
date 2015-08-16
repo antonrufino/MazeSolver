@@ -6,7 +6,7 @@ function Solver() {
 	this.numNodes = 0;
 }
 
-GOL.prototype.init = function () {
+Solver.prototype.init = function () {
 	this.numNodes = numRows * numCols;
 	
 	for (var i = 0; i < numNodes; ++i) {
