@@ -65,7 +65,7 @@ function stop() {
 function reset() {
 	this.paused = true;
 	this.Solver.init();
-	this.Solver.population = 0;
+	this.UI.init();
 	this.UI.drawFrame(Life.Solver);
 }
 
@@ -80,6 +80,7 @@ function mouseDownHandler(e) {
 	})();
 	
 	Life.UI.cellState = !Life.UI.cells[position.row][position.col];
+	Life.Solver.switchNodeState(position.row, position.col, !Life.UI.cellState);
 }
 
 function mouseUpHandler(e) {
@@ -90,6 +91,9 @@ function mouseMoveHandler(e) {
 	if (Life.mouseDown) {
 		var position = Life.UI.fillCell(e.clientX, e.clientY);
 		Life.UI.cells[position.row][position.col] = Life.UI.cellState;
+		
+		//If a cell is set to true, it is a wall, and as such the state passed must be negated.
+		Life.Solver.switchNodeState(position.row, position.col, !Life.UI.cellState);
 	}
 }
 
@@ -99,7 +103,6 @@ function clickHandler(e) {
 
 function setGUI() {
 	var gui = new dat.GUI();
-	gui.add(Life.Solver, 'population').listen();
 	gui.add(Life, 'start');
 	gui.add(Life, 'stop');
 	gui.add(Life, 'reset');

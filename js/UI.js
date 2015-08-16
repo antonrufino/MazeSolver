@@ -20,7 +20,7 @@ function UI() {
 	this.cellSize = 30;
 	this.background = '#000';
 	this.emptyCell = '#2a2a2a';
-	this.cellColor = '#ee0000'; //00eeee
+	this.cellColor = '#111'//'00eeee';
 	this.cellState = false;
 	this.cells = [];
 }
