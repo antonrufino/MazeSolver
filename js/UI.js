@@ -38,6 +38,7 @@ UI.prototype.init = function() {
 	this.numCols = Math.floor((canvas.width - 1) / Life.UI.cellSize);
 	
 	for (var i = 0; i < this.numRows; ++i) {
+	    this.cells[i] = [];
 	    for (var j = 0; j < this.numCols; ++j) {
 	        this.cells[i][j] = false;
 	    }

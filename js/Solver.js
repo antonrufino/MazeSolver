@@ -7,9 +7,9 @@ function Solver() {
 }
 
 Solver.prototype.init = function () {
-	this.numNodes = numRows * numCols;
+	this.numNodes = Life.UI.numRows * Life.UI.numCols;
 	
-	for (var i = 0; i < numNodes; ++i) {
+	for (var i = 0; i < this.numNodes; ++i) {
 	    this.distances[i] = null;
 	    this.visited[i] = false;
 	    this.path[i] = null;
@@ -17,9 +17,9 @@ Solver.prototype.init = function () {
 	
 	//Initialize adjacency matrix
 	for (var i = 0; i < this.numNodes; ++i) {
-	    maze[i] = [];
+	    this.maze[i] = [];
 	    for (var j = 0; j < this.numNodes; ++j) {
-	        maze[i][j] = false;
+	        this.maze[i][j] = false;
 	    }
 	}
 	
@@ -29,12 +29,12 @@ Solver.prototype.init = function () {
 	        currentNode = i * Life.UI.numCols + j
 	        if (i != Life.UI.numRows - 1 && j != Life.UI.numCols -1) {
 	            if (i == Life.UI.numRows - 1) {
-	                maze[currentNode][currentNode + 1] = true;
+	                this.maze[currentNode][currentNode + 1] = true;
 	            } else if (j = Life.UI.numCols - 1) {
-	                maze[currentNode + 1][currentNode] = true;
+	                this.maze[currentNode + 1][currentNode] = true;
 	            } else {
-	                maze[currentNode][currentNode + 1] = true;
-	                maze[currentNode + 1][currentNode] = true;
+	                this.maze[currentNode][currentNode + 1] = true;
+	                this.maze[currentNode + 1][currentNode] = true;
 	            }
 	        }
 	    }
