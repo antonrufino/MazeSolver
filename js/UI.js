@@ -17,7 +17,7 @@
 var canvas, ctx;
 
 function UI() {
-	this.cellSize = 10;
+	this.cellSize = 30;
 	this.background = '#000';
 	this.emptyCell = '#2a2a2a';
 	this.cellColor = '#ee0000'; //00eeee
