@@ -1,6 +1,4 @@
 function Solver() {
-	this.numRows = 0;
-	this.numCols = 0;
 	this.maze = [];
 	this.distances = [];
 	this.visited = [];
@@ -9,8 +7,6 @@ function Solver() {
 }
 
 GOL.prototype.init = function () {
-	this.numRows = Math.floor((canvas.height - 1) / Life.UI.cellSize);
-	this.numCols = Math.floor((canvas.width - 1) / Life.UI.cellSize);
 	this.numNodes = numRows * numCols;
 	
 	for (var i = 0; i < numNodes; ++i) {
@@ -19,6 +15,7 @@ GOL.prototype.init = function () {
 	    this.path[i] = null;
 	}
 	
+	//Initialize adjacency matrix
 	for (var i = 0; i < this.numNodes; ++i) {
 	    maze[i] = [];
 	    for (var j = 0; j < this.numNodes; ++j) {
@@ -26,13 +23,14 @@ GOL.prototype.init = function () {
 	    }
 	}
 	
-	for (var i = 0; i < this.numRows; ++i) {
-	    for (var j = 0; j < this.numCols; ++j) {
-	        currentNode = i * this.numCols + j
-	        if (i != this.numRows - 1 && j != this.numCols -1) {
-	            if (i == this.numRows - 1) {
+    //Initialize graph edges
+	for (var i = 0; i < Life.UI.numRows; ++i) {
+	    for (var j = 0; j < Life.UI.numCols; ++j) {
+	        currentNode = i * Life.UI.numCols + j
+	        if (i != Life.UI.numRows - 1 && j != Life.UI.numCols -1) {
+	            if (i == Life.UI.numRows - 1) {
 	                maze[currentNode][currentNode + 1] = true;
-	            } else if (j = this.numCols - 1) {
+	            } else if (j = Life.UI.numCols - 1) {
 	                maze[currentNode + 1][currentNode] = true;
 	            } else {
 	                maze[currentNode][currentNode + 1] = true;
