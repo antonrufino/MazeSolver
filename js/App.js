@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var Life;
+var app;
 
 function App() {
 	this.paused = true;
@@ -34,7 +34,7 @@ App.prototype.init = function() {
 	this.UI.init();
 	this.Solver.init();
 	
-	this.UI.drawFrame(this.Solver);
+	this.UI.drawFrame(null, null);
 	
 	setGUI();
 	
@@ -45,12 +45,8 @@ App.prototype.init = function() {
 }
 
 function run() {
-	Life.UI.drawFrame(Life.Solver);
-	
-	if (!Life.paused) {
-		console.log('tick');
-		window.requestAnimFrame(run);
-	}
+    app.Solver.initMaze(app.UI.cells);
+	app.UI.drawFrame(app.Solver.bfs(), app.Solver.dest);
 }
 
 function start() {
@@ -66,49 +62,61 @@ function reset() {
 	this.paused = true;
 	this.Solver.init();
 	this.UI.init();
-	this.UI.drawFrame(Life.Solver);
+	this.UI.drawFrame(null, null);
+}
+
+function getPosition(x, y) {
+    return {
+		row: Math.floor(y / app.UI.cellSize),
+		col: Math.floor(x / app.UI.cellSize)
+	};
 }
 
 function mouseDownHandler(e) {
-	Life.mouseDown = true;
-	
-	var position = (function () {
-		return {
-			row: Math.floor(e.clientY / Life.UI.cellSize),
-			col: Math.floor(e.clientX / Life.UI.cellSize)
-		};
-	})();
-	
-	Life.UI.cellState = !Life.UI.cells[position.row][position.col];
-	Life.Solver.switchNodeState(position.row, position.col, !Life.UI.cellState);
+    var position = getPosition(e.clientX, e.clientY);
+    if (position.row < app.UI.numRows && position.col < app.UI.numCols) {
+	    app.mouseDown = true;
+	    position = getPosition(e.clientX, e.clientY);
+	    app.UI.cellState = !app.UI.cells[position.row][position.col];
+	    app.UI.cells[position.row][position.col] = app.UI.cellState;
+
+        var color = app.UI.cellState == 1 ? app.UI.wallColor : app.UI.emptyCell;
+	    app.UI.fillCell(position.row, position.col, color);
+    }
 }
 
 function mouseUpHandler(e) {
-	Life.mouseDown = false;
+	app.mouseDown = false;
 }
 
 function mouseMoveHandler(e) {
-	if (Life.mouseDown) {
-		var position = Life.UI.fillCell(e.clientX, e.clientY);
-		Life.UI.cells[position.row][position.col] = Life.UI.cellState;
-		
-		//If a cell is set to true, it is a wall, and as such the state passed must be negated.
-		Life.Solver.switchNodeState(position.row, position.col, !Life.UI.cellState);
+	if (app.mouseDown) {
+		var position = getPosition(e.clientX, e.clientY);
+	    if (position.row < app.UI.numRows && position.col < app.UI.numCols) {
+	        var color = app.UI.cellState == 1 ? app.UI.wallColor : app.UI.emptyCell;
+	        app.UI.cells[position.row][position.col] = app.UI.cellState;
+	        app.UI.fillCell(position.row, position.col, color);
+	    }
 	}
 }
 
 function clickHandler(e) {
-	var position = Life.UI.fillCell(e.clientX, e.clientY);
+	var position = getPosition(e.clientX, e.clientY);
+	if (position.row < app.UI.numRows && position.col < app.UI.numCols) {
+	    var color = app.UI.cellState == 1 ? app.UI.wallColor : app.UI.emptyCell;
+	    app.UI.cells[position.row][position.col] = app.UI.cellState;
+	    app.UI.fillCell(position.row, position.col, color);
+	}
 }
 
 function setGUI() {
 	var gui = new dat.GUI();
-	gui.add(Life, 'start');
-	gui.add(Life, 'stop');
-	gui.add(Life, 'reset');
+	gui.add(app, 'start');
+	gui.add(app, 'stop');
+	gui.add(app, 'reset');
 }
 
 window.addEventListener('load', function () {
-	Life = new App();
-	Life.init();
+	app = new App();
+	app.init();
 }, false);

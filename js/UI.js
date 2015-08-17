@@ -17,12 +17,16 @@
 var canvas, ctx;
 
 function UI() {
-	this.cellSize = 30;
+	this.cellSize = 15;
 	this.background = '#000';
 	this.emptyCell = '#2a2a2a';
-	this.cellColor = '#111'//'00eeee';
+	this.wallColor = '#111';
+	this.pathColor = '#00eeee';
+	this.terminalColor = '#e00';
 	this.cellState = false;
 	this.cells = [];
+	this.numRows = 0;
+	this.numCols = 0;
 }
 
 UI.prototype.init = function() {
@@ -34,8 +38,8 @@ UI.prototype.init = function() {
 		ctx = canvas.getContext('2d');
 	}
 	
-	this.numRows = Math.floor((canvas.height - 1) / Life.UI.cellSize);
-	this.numCols = Math.floor((canvas.width - 1) / Life.UI.cellSize);
+	this.numRows = Math.floor((canvas.height - 1) / app.UI.cellSize);
+	this.numCols = Math.floor((canvas.width - 1) / app.UI.cellSize);
 	
 	for (var i = 0; i < this.numRows; ++i) {
 	    this.cells[i] = [];
@@ -45,27 +49,20 @@ UI.prototype.init = function() {
 	} 
 }
 
-UI.prototype.fillCell = function (mouseX, mouseY) {
-	var cellX = Math.floor(mouseX / this.cellSize); 
-	var cellY = Math.floor(mouseY / this.cellSize);
-	
-	ctx.fillStyle = this.cellState ? this.cellColor : this.emptyCell;
-	ctx.fillRect(cellX * this.cellSize + 1, cellY * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
-	
-	return {
-		row: cellY,
-		col: cellX
-	};
+UI.prototype.fillCell = function (row, col, color) {
+	ctx.fillStyle = color;
+	ctx.fillRect(col * this.cellSize + 1, row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
 }
 
-UI.prototype.drawFrame = function () {
+UI.prototype.drawFrame = function (path, dest) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = this.background;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
 	for (var i = 0; i < this.cells.length; ++i) {
 		for (var j = 0; j < this.cells[i].length; ++j) {
 			if (this.cells[i][j]) {
-				ctx.fillStyle = this.cellColor;
+				ctx.fillStyle = this.wallColor;
 			} else {
 				ctx.fillStyle = this.emptyCell;
 			}
@@ -73,4 +70,18 @@ UI.prototype.drawFrame = function () {
 			ctx.fillRect(j * this.cellSize + 1, i * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
 		}
 	}
+
+    var current = dest;
+	while (current != null) {
+	    var position = app.Solver.nodeToPosition(current);
+	    ctx.fillStyle = this.pathColor;
+	    ctx.fillRect(position.col * this.cellSize + 1, position.row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
+	    current = path[current];
+	}
+	
+	var destPosition = app.Solver.nodeToPosition(app.Solver.dest);
+    
+    ctx.fillStyle = this.terminalColor;
+    ctx.fillRect(1, 1, this.cellSize - 2, this.cellSize - 2);
+    ctx.fillRect(destPosition.col * this.cellSize + 1, destPosition.row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
 }
