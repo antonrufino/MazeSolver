@@ -3,7 +3,7 @@ function Solver() {
 	this.queue = [];
 	this.distances = [];
 	this.visited = [];
-	this.path = [];
+	this.reversePath = [];
 	this.numNodes = 0;
 	this.start = 0;
 	this.dest = 0;
@@ -18,7 +18,7 @@ Solver.prototype.init = function () {
 	for (var i = 0; i < this.numNodes; ++i) {
 	    this.distances[i] = -1;
 	    this.visited[i] = false;
-	    this.path[i] = null;
+	    this.reversePath[i] = null;
 	}
 	
 	this.distances[this.start] = 0;
@@ -124,7 +124,7 @@ Solver.prototype.bfs = function() {
             if (this.maze[current][i] && !this.visited[i]) {
                 var alt = this.distances[current] + 1;
                 if (alt < this.distances[i] || this.distances[i] == -1) {
-                    this.path[i] = current;
+                    this.reversePath[i] = current;
                     this.distances[i] = alt;
                 }
                 
@@ -134,7 +134,14 @@ Solver.prototype.bfs = function() {
         
     }
     
-    return this.path;
+    var path = [];
+    var current = this.reversePath[this.dest];
+    while (this.reversePath[current] != null) {
+        path.unshift(current);
+        current = this.reversePath[current];
+    } 
+    
+    return path;
 }
     
 Solver.prototype.nodeToPosition = function(node) {

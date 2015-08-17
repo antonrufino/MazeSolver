@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var app;
+var app, current;
 
 function App() {
 	this.paused = true;
@@ -44,9 +44,22 @@ App.prototype.init = function() {
 	canvas.addEventListener('click', clickHandler, false);
 }
 
+function animate() {
+     if (app.UI.path.length != 0) {
+        current = app.UI.path.splice(0, 1)[0];
+        
+        var position = app.Solver.nodeToPosition(current);
+        app.UI.fillCell(position.row, position.col, app.UI.pathColor);
+        
+        window.requestAnimFrame(animate)
+     }
+}
+
 function run() {
     app.Solver.initMaze(app.UI.cells);
-	app.UI.drawFrame(app.Solver.bfs(), app.Solver.dest);
+    app.UI.path = app.Solver.bfs();
+    app.UI.drawFrame();
+    animate();
 }
 
 function start() {

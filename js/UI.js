@@ -27,6 +27,7 @@ function UI() {
 	this.cells = [];
 	this.numRows = 0;
 	this.numCols = 0;
+	this.path = [];
 }
 
 UI.prototype.init = function() {
@@ -47,6 +48,8 @@ UI.prototype.init = function() {
 	        this.cells[i][j] = false;
 	    }
 	} 
+	
+	this.path = []
 }
 
 UI.prototype.fillCell = function (row, col, color) {
@@ -54,8 +57,8 @@ UI.prototype.fillCell = function (row, col, color) {
 	ctx.fillRect(col * this.cellSize + 1, row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
 }
 
-UI.prototype.drawFrame = function (path, dest) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+UI.prototype.drawFrame = function () {
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = this.background;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
@@ -69,14 +72,6 @@ UI.prototype.drawFrame = function (path, dest) {
 			
 			ctx.fillRect(j * this.cellSize + 1, i * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
 		}
-	}
-
-    var current = dest;
-	while (current != null) {
-	    var position = app.Solver.nodeToPosition(current);
-	    ctx.fillStyle = this.pathColor;
-	    ctx.fillRect(position.col * this.cellSize + 1, position.row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
-	    current = path[current];
 	}
 	
 	var destPosition = app.Solver.nodeToPosition(app.Solver.dest);
