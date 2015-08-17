@@ -19,3 +19,33 @@
 	margin: 0px;
 	padding: 0px;
 }
+
+#help {
+    position: absolute;
+    top: 15px;
+    left: 35px;
+    padding: 10px;
+    color: #ddd;
+    background: #111;
+    font-family: "Arial"
+}
+
+.visible {
+    display: visible;
+}
+
+.hidden {
+    display: none; 
+}
+
+a {
+    color: #00eeee;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
