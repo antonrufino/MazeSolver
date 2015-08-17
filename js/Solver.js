@@ -11,7 +11,8 @@ function Solver() {
 
 Solver.prototype.init = function () {
 	this.numNodes = app.UI.numRows * app.UI.numCols;
-	this.dest = this.numNodes - 1;
+	this.start = app.UI.numCols + 1;
+	this.dest = (app.UI.numRows - 2) * app.UI.numCols + app.UI.numCols - 2;
 	this.queue = [];
 	this.queue.push(this.start);
 	

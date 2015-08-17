@@ -19,10 +19,10 @@ var app, current;
 
 function App() {
 	this.paused = true;
-	this.start = start;
 	this.stop = stop;
 	this.run = run;
 	this.reset = reset;
+	this.clear = clear;
 
 	this.UI = new UI();
 	this.Solver = new Solver();
@@ -34,7 +34,7 @@ App.prototype.init = function() {
 	this.UI.init();
 	this.Solver.init();
 	
-	this.UI.drawFrame(null, null);
+	this.UI.drawFrame();
 	
 	setGUI();
 	
@@ -56,26 +56,21 @@ function animate() {
 }
 
 function run() {
+    app.Solver.init();
     app.Solver.initMaze(app.UI.cells);
     app.UI.path = app.Solver.bfs();
     app.UI.drawFrame();
     animate();
 }
 
-function start() {
-	this.paused = false;
-	this.run();
-}
-
-function stop() {
-	this.paused = true;
-}
-
 function reset() {
-	this.paused = true;
-	this.Solver.init();
+    this.UI.drawFrame()
+}
+
+function clear() {
+    this.Solver.init();
 	this.UI.init();
-	this.UI.drawFrame(null, null);
+	this.UI.drawFrame();
 }
 
 function getPosition(x, y) {
@@ -95,6 +90,7 @@ function mouseDownHandler(e) {
 
         var color = app.UI.cellState == 1 ? app.UI.wallColor : app.UI.emptyCell;
 	    app.UI.fillCell(position.row, position.col, color);
+	    app.UI.drawFrame();
     }
 }
 
@@ -119,14 +115,14 @@ function clickHandler(e) {
 	    var color = app.UI.cellState == 1 ? app.UI.wallColor : app.UI.emptyCell;
 	    app.UI.cells[position.row][position.col] = app.UI.cellState;
 	    app.UI.fillCell(position.row, position.col, color);
+	    app.UI.drawFrame();
 	}
 }
 
 function setGUI() {
 	var gui = new dat.GUI();
-	gui.add(app, 'start');
-	gui.add(app, 'stop');
-	gui.add(app, 'reset');
+	gui.add(app, 'run');
+	gui.add(app, 'clear');
 }
 
 window.addEventListener('load', function () {

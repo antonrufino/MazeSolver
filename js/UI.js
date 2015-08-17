@@ -74,9 +74,10 @@ UI.prototype.drawFrame = function () {
 		}
 	}
 	
+	var startPosition = app.Solver.nodeToPosition(app.Solver.start);
 	var destPosition = app.Solver.nodeToPosition(app.Solver.dest);
     
     ctx.fillStyle = this.terminalColor;
-    ctx.fillRect(1, 1, this.cellSize - 2, this.cellSize - 2);
+    ctx.fillRect(startPosition.col * this.cellSize + 1, startPosition.row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
     ctx.fillRect(destPosition.col * this.cellSize + 1, destPosition.row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
 }
