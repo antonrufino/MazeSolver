@@ -1,4 +1,4 @@
-Life
+Maze Solver
 ====
 
-An implementation of Conway's Game of Life using HTML5 Canvas and JavaScript
+A maze solver using breadth first search. Made using HTML5 Canvas and JS. 
