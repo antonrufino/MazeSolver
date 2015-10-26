@@ -38,30 +38,30 @@ UI.prototype.init = function() {
 	if (canvas.getContext) {
 		ctx = canvas.getContext('2d');
 	}
-	
+
 	this.numRows = Math.floor((canvas.height - 1) / app.UI.cellSize);
 	this.numCols = Math.floor((canvas.width - 1) / app.UI.cellSize);
-	
+
 	for (var i = 0; i < this.numRows; ++i) {
 	    this.cells[i] = [];
 	    for (var j = 0; j < this.numCols; ++j) {
 	        this.cells[i][j] = false;
 	    }
-	} 
-	
-	this.path = []
-}
+	}
+
+	this.path = [];
+};
 
 UI.prototype.fillCell = function (row, col, color) {
 	ctx.fillStyle = color;
 	ctx.fillRect(col * this.cellSize + 1, row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
-}
+};
 
 UI.prototype.drawFrame = function () {
     //ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = this.background;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	
+
 	for (var i = 0; i < this.cells.length; ++i) {
 		for (var j = 0; j < this.cells[i].length; ++j) {
 			if (this.cells[i][j]) {
@@ -69,15 +69,15 @@ UI.prototype.drawFrame = function () {
 			} else {
 				ctx.fillStyle = this.emptyCell;
 			}
-			
+
 			ctx.fillRect(j * this.cellSize + 1, i * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
 		}
 	}
-	
+
 	var startPosition = app.Solver.nodeToPosition(app.Solver.start);
 	var destPosition = app.Solver.nodeToPosition(app.Solver.dest);
-    
+
     ctx.fillStyle = this.terminalColor;
     ctx.fillRect(startPosition.col * this.cellSize + 1, startPosition.row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
     ctx.fillRect(destPosition.col * this.cellSize + 1, destPosition.row * this.cellSize + 1, this.cellSize - 2, this.cellSize - 2);
-}
+};

@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 var app, current;
 
 function App() {
@@ -26,32 +25,32 @@ function App() {
 
 	this.UI = new UI();
 	this.Solver = new Solver();
-	
+
 	this.mouseDown = false;
 }
 
 App.prototype.init = function() {
 	this.UI.init();
 	this.Solver.init();
-	
+
 	this.UI.drawFrame();
-	
+
 	setGUI();
-	
+
 	canvas.addEventListener('mousedown', mouseDownHandler, false);
 	canvas.addEventListener('mouseup', mouseUpHandler, false);
 	canvas.addEventListener('mousemove', mouseMoveHandler, false);
 	canvas.addEventListener('click', clickHandler, false);
-}
+};
 
 function animate() {
-     if (app.UI.path.length != 0) {
+     if (app.UI.path.length !== 0) {
         current = app.UI.path.splice(0, 1)[0];
-        
+
         var position = app.Solver.nodeToPosition(current);
         app.UI.fillCell(position.row, position.col, app.UI.pathColor);
-        
-        window.requestAnimFrame(animate)
+
+        window.requestAnimFrame(animate);
      }
 }
 
@@ -64,7 +63,7 @@ function run() {
 }
 
 function reset() {
-    this.UI.drawFrame()
+    this.UI.drawFrame();
 }
 
 function clear() {
